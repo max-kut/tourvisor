@@ -36,12 +36,13 @@ class Hotel extends AbstractModel
         'rating'        => 'float',
         'coord1'        => 'float',
         'coord2'        => 'float',
-        'active'        => 'boolean',
-        'relax'         => 'boolean',
-        'family'        => 'boolean',
-        'health'        => 'boolean',
-        'city'          => 'boolean',
-        'deluxe'        => 'boolean',
+        'is_active'     => 'boolean',
+        'is_relax'      => 'boolean',
+        'is_family'     => 'boolean',
+        'is_health'     => 'boolean',
+        'is_city'       => 'boolean',
+        'is_beach'      => 'boolean',
+        'is_deluxe'     => 'boolean',
         'isphoto'       => 'boolean',
         'isdescription' => 'boolean',
         'isreviews'     => 'boolean',
@@ -57,6 +58,12 @@ class Hotel extends AbstractModel
         'countryname'      => 'country',
         'regionname'       => 'region',
         'subregionname'    => 'subregion',
+        'active'           => 'is_active',
+        'relax'            => 'is_relax',
+        'family'           => 'is_family',
+        'health'           => 'is_health',
+        'city'             => 'is_city',
+        'deluxe'           => 'is_deluxe',
     ];
 
     /**
@@ -67,7 +74,7 @@ class Hotel extends AbstractModel
     protected function setBeachAttribute($value)
     {
         if (preg_match('/^[01]$/', $value)) {
-            $this->attributes['beach'] = boolval($value);
+            $this->setAttribute('is_beach', $value);
         } else {
             $this->attributes['beach'] = $value;
         }
@@ -99,6 +106,7 @@ class Hotel extends AbstractModel
 
     /**
      * приведение массива изображений к нормальному виду
+     *
      * @param array $value
      */
     protected function setImagesAttribute(array $value)
