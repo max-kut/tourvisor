@@ -31,5 +31,15 @@
   "config": {
     "sort-packages": true,
     "optimize-autoloader": true
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Tourvisor\\Integrations\\Laravel\\TourvisorServiceProvider"
+      ],
+      "aliases": {
+        "Tourvisor": "Tourvisor\\Integrations\\Laravel\\TourvisorFacade"
+      }
+    }
   }
 }
