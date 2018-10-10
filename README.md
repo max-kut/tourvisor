@@ -1,7 +1,10 @@
 # tourvisor.ru API library
 
 PHP обертка для работы с API [tourvisor.ru](https://tourvisor.ru "tourvisor.ru")
-Документация по API находится на [диске](https://drive.google.com/drive/folders/0B1Lc2hczO1lCZ2VPNlpVcGItZXc "диске"). Библиотека в разработке
+
+Документация по API находится на [диске](https://drive.google.com/drive/folders/0B1Lc2hczO1lCZ2VPNlpVcGItZXc "диске"). 
+
+Библиотека еще в разработке. Не стесняйтесь создавать issue
 
 ## Установка
 Установка в проект осуществляется при помощи **composer**: 
@@ -11,7 +14,7 @@ PHP обертка для работы с API [tourvisor.ru](https://tourvisor.r
 Минимальные системные требования:
 `php: ^7.1.3`
 
-##Использование
+## Использование
 
 Логика работы с библиотекой проста - создается один объект ядра библиотеки с http клиентом, который имеет метод `getResults`, принимающий единственный параметр - объект запроса из `Tourvisor\Requests`. В каждом классе запроса есть docBlock с описанием параметров, которые можно передать в запрос.
 
@@ -83,9 +86,15 @@ TOURVISOR_PASSWORD="password"
 ```
 Либо можно извлечь сервис из любого места приложения при помощи сервис-контейнера
 ```php
-app('tourvisor');
+$tourvisor = app('tourvisor');
 // или
-app()->make('tourvisor');
+$tourvisor = app()->make('tourvisor');
+```
+Или использовать фасад `Tourvisor`:
+```php
+// ... сформировали $searchRequest
+
+$result = \Tourvisor::getResult($searchRequest);
 ```
 
 ### Помощь в разработке
