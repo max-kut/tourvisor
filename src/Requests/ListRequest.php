@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: max_k
- * Date: 21.09.18
- * Time: 19:02
- */
 
 namespace Tourvisor\Requests;
 
