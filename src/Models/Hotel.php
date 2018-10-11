@@ -34,6 +34,7 @@ class Hotel extends AbstractModel
         'reviewscount'  => 'integer',
         'build'         => 'integer',
         'repair'        => 'integer',
+        'stars'         => 'integer',
         'price'         => 'float',
         'priceue'       => 'float',
         'rating'        => 'float',
