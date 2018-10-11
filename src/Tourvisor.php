@@ -9,6 +9,7 @@ use Tourvisor\Models\Hotel;
 use Tourvisor\Models\Meal;
 use Tourvisor\Models\Operator;
 use Tourvisor\Models\Region;
+use Tourvisor\Models\Review;
 use Tourvisor\Models\SubRegion;
 use Tourvisor\Models\Tour;
 use Tourvisor\Requests\AbstractRequest;
@@ -140,6 +141,9 @@ class Tourvisor
         if ($hotelTours = array_get($hotel, 'tours.tour')) {
             $hotel['tours'] = collect(array_map([$this, 'transformTourArray'], $hotelTours));
         }
+        if ($hotelReviews = array_get($hotel, 'reviews.review')) {
+            $hotel['reviews'] = collect(array_map([$this, 'transformReviewArray'], $hotelReviews));
+        }
 
         return new Hotel($hotel);
     }
@@ -205,5 +209,14 @@ class Tourvisor
     protected function transformOperatorArray(array $operator)
     {
         return new Operator($operator);
+    }
+
+    /**
+     * @param array $review
+     * @return \Tourvisor\Models\Review
+     */
+    protected function transformReviewArray(array $review)
+    {
+        return new Review($review);
     }
 }
