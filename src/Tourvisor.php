@@ -10,6 +10,7 @@ use Tourvisor\Models\Meal;
 use Tourvisor\Models\Operator;
 use Tourvisor\Models\Region;
 use Tourvisor\Models\Review;
+use Tourvisor\Models\Star;
 use Tourvisor\Models\SubRegion;
 use Tourvisor\Models\Tour;
 use Tourvisor\Requests\AbstractRequest;
@@ -80,7 +81,7 @@ class Tourvisor
                     $res['meals'] = collect(array_map([$this, 'transformMealArray'], $meals));
                 }
                 if ($stars = array_get($response, 'lists.stars.star')) {
-                    $res['stars'] = collect(array_map([$this, 'transformMealArray'], $stars));
+                    $res['stars'] = collect(array_map([$this, 'transformStarArray'], $stars));
                 }
                 if ($hotels = array_get($response, 'lists.hotels.hotel')) {
                     $res['hotels'] = collect(array_map([$this, 'transformHotelArray'], $hotels));
@@ -200,6 +201,15 @@ class Tourvisor
     protected function transformMealArray(array $meal)
     {
         return new Meal($meal);
+    }
+
+    /**
+     * @param array $star
+     * @return \Tourvisor\Models\Star
+     */
+    protected function transformStarArray(array $star)
+    {
+        return new Star($star);
     }
 
     /**
