@@ -18,9 +18,14 @@ class TourvisorServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->mergeConfigFrom(
+            __DIR__ . '/config/tourvisor.php', 'tourvisor'
+        );
+
         $this->app->singleton(Tourvisor::class, function ($app) {
-            return new Tourvisor(new Client(env('TOURVISOR_LOGIN'), env('TOURVISOR_PASSWORD')));
+            return new Tourvisor(new Client(config('tourvisor.login'), config('tourvisor.password')));
         });
+
         $this->app->alias(Tourvisor::class, 'tourvisor');
     }
 
