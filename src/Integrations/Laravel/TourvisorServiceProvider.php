@@ -4,6 +4,13 @@ namespace Tourvisor\Integrations\Laravel;
 
 use Illuminate\Support\ServiceProvider;
 use Tourvisor\Client;
+use Tourvisor\Requests\ActualizeDetailRequest;
+use Tourvisor\Requests\ActualizeRequest;
+use Tourvisor\Requests\HotelRequest;
+use Tourvisor\Requests\HotToursRequest;
+use Tourvisor\Requests\ListRequest;
+use Tourvisor\Requests\SearchRequest;
+use Tourvisor\Requests\SearchResultRequest;
 use Tourvisor\Tourvisor;
 
 class TourvisorServiceProvider extends ServiceProvider
@@ -27,6 +34,15 @@ class TourvisorServiceProvider extends ServiceProvider
         });
 
         $this->app->alias(Tourvisor::class, 'tourvisor');
+
+        // register requests aliases
+        $this->app->alias(SearchRequest::class, 'tourvisor.search');
+        $this->app->alias(SearchResultRequest::class, 'tourvisor.result');
+        $this->app->alias(ListRequest::class, 'tourvisor.list');
+        $this->app->alias(ActualizeRequest::class, 'tourvisor.actualize');
+        $this->app->alias(ActualizeDetailRequest::class, 'tourvisor.actualize_detail');
+        $this->app->alias(HotelRequest::class, 'tourvisor.hotel');
+        $this->app->alias(HotToursRequest::class, 'tourvisor.hot');
     }
 
     /**
