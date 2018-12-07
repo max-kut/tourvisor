@@ -53,4 +53,7 @@ class SearchRequest extends AbstractRequest
         'operators'  => 'array',
     ];
 
+    protected $requiredParams = [
+        'country', 'departure'
+    ];
 }
