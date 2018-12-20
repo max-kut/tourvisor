@@ -51,8 +51,16 @@ class HotToursRequest extends AbstractRequest
     protected $requiredParams = ['items', 'city'];
 
     protected $casts = [
-        'datefrom' => 'date',
-        'dateto'   => 'date',
+        'items'     => 'integer',
+        'city'      => 'integer',
+        'city2'     => 'integer',
+        'city3'     => 'integer',
+        'maxdays'   => 'integer',
+        'countries' => 'array',
+        'regions'   => 'array',
+        'operators' => 'array',
+        'datefrom'  => 'date',
+        'dateto'    => 'date',
     ];
 
 }
