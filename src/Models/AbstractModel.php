@@ -4,6 +4,7 @@ namespace Tourvisor\Models;
 
 use ArrayAccess;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use JsonSerializable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Support\Arrayable;
@@ -85,7 +86,7 @@ abstract class AbstractModel implements ArrayAccess, Arrayable, Jsonable, JsonSe
         if(isset($this->fieldAliases[$name])){
             $name = $this->fieldAliases[$name];
         }
-        if (method_exists($this, $setter = 'set' . camel_case($name) . 'Attribute')) {
+        if (method_exists($this, $setter = 'set' . Str::camel($name) . 'Attribute')) {
             $this->$setter($value);
         } else if (isset($this->casts[$name]) && method_exists($this, $setter = $this->casts[$name] . 'Mutator')) {
             $this->$setter($name, $value);

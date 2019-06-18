@@ -2,6 +2,8 @@
 
 namespace Tourvisor\Models;
 
+use Illuminate\Support\Arr;
+
 /**
  * Class Hotel
  * В этой модели достаточно много параметров приводятся к единому типу
@@ -115,7 +117,7 @@ class Hotel extends AbstractModel
      */
     protected function setImagesAttribute(array $value)
     {
-        if ($images = array_get($value, 'image')) {
+        if ($images = Arr::get($value, 'image')) {
             $this->attributes['images'] = $images;
         } else {
             $this->attributes['images'] = $value;

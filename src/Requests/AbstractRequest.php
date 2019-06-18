@@ -2,6 +2,8 @@
 
 namespace Tourvisor\Requests;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Tourvisor\Exceptions\HasEmptyRequiredParamsException;
 use Tourvisor\Exceptions\NoEndPointException;
 use Tourvisor\Exceptions\ValidateParamException;
@@ -61,10 +63,10 @@ abstract class AbstractRequest
      */
     public function __set($name, $value)
     {
-        if (method_exists($this, $validator = 'validate' . camel_case($name) . 'Param')) {
+        if (method_exists($this, $validator = 'validate' . Str::camel($name) . 'Param')) {
             $this->$validator($value);
         }
-        if (method_exists($this, $method = 'set' . camel_case($name) . 'Param')) {
+        if (method_exists($this, $method = 'set' . Str::camel($name) . 'Param')) {
             $this->$method($value);
         } else if (isset($this->casts[$name]) && method_exists($this, $method = $this->casts[$name] . 'Mutator')) {
             $this->$method($name, $value);
@@ -79,7 +81,7 @@ abstract class AbstractRequest
      */
     public function __get($name)
     {
-        return array_get($this->params, $name);
+        return Arr::get($this->params, $name);
     }
 
     /**

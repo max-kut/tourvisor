@@ -2,6 +2,7 @@
 
 namespace Tourvisor;
 
+use Illuminate\Support\Arr;
 use Tourvisor\Exceptions\ResponseException;
 use Tourvisor\Models\Country;
 use Tourvisor\Models\Departure;
@@ -14,7 +15,6 @@ use Tourvisor\Models\Star;
 use Tourvisor\Models\SubRegion;
 use Tourvisor\Models\Tour;
 use Tourvisor\Requests\AbstractRequest;
-use Tourvisor\Requests\ActualizeDetailRequest;
 use Tourvisor\Requests\ActualizeRequest;
 use Tourvisor\Requests\HotelRequest;
 use Tourvisor\Requests\HotToursRequest;
@@ -52,81 +52,67 @@ class Tourvisor
      */
     protected function transformResponse(AbstractRequest $request, array $response)
     {
+        if ($errorMess = Arr::get($response, 'error.errormessage')) {
+            throw new ResponseException($errorMess);
+        }
         switch (true) {
             case $request instanceof SearchRequest:
-                return intval(array_get($response, 'result.requestid'));
-
+                return intval(Arr::get($response, 'result.requestid'));
             case $request instanceof SearchResultRequest:
                 return [
-                    'status' => array_get($response, 'data.status'),
+                    'status' => Arr::get($response, 'data.status'),
                     'hotels' => collect(array_map([$this, 'transformHotelArray'],
-                        array_get($response, 'data.result.hotel', [])))
+                        Arr::get($response, 'data.result.hotel', [])))
                 ];
-
             case $request instanceof ListRequest:
                 $res = [];
-                if ($departures = array_get($response, 'lists.departures.departure')) {
+                if ($departures = Arr::get($response, 'lists.departures.departure')) {
                     $res['departures'] = collect(array_map([$this, 'transformDepartureArray'], $departures));
                 }
-                if ($countries = array_get($response, 'lists.countries.country')) {
+                if ($countries = Arr::get($response, 'lists.countries.country')) {
                     $res['countries'] = collect(array_map([$this, 'transformCountryArray'], $countries));
                 }
-                if ($regions = array_get($response, 'lists.regions.region')) {
+                if ($regions = Arr::get($response, 'lists.regions.region')) {
                     $res['regions'] = collect(array_map([$this, 'transformRegionArray'], $regions));
                 }
-                if ($subRegions = array_get($response, 'lists.subregions.subregion')) {
+                if ($subRegions = Arr::get($response, 'lists.subregions.subregion')) {
                     $res['subregions'] = collect(array_map([$this, 'transformSubRegionArray'], $subRegions));
                 }
-                if ($meals = array_get($response, 'lists.meals.meal')) {
+                if ($meals = Arr::get($response, 'lists.meals.meal')) {
                     $res['meals'] = collect(array_map([$this, 'transformMealArray'], $meals));
                 }
-                if ($stars = array_get($response, 'lists.stars.star')) {
+                if ($stars = Arr::get($response, 'lists.stars.star')) {
                     $res['stars'] = collect(array_map([$this, 'transformStarArray'], $stars));
                 }
-                if ($hotels = array_get($response, 'lists.hotels.hotel')) {
+                if ($hotels = Arr::get($response, 'lists.hotels.hotel')) {
                     $res['hotels'] = collect(array_map([$this, 'transformHotelArray'], $hotels));
                 }
-                if ($operators = array_get($response, 'lists.operators.operator')) {
+                if ($operators = Arr::get($response, 'lists.operators.operator')) {
                     $res['operators'] = collect(array_map([$this, 'transformOperatorArray'], $operators));
                 }
-                if ($flydates = array_get($response, 'lists.flydates.flydate')) {
+                if ($flydates = Arr::get($response, 'lists.flydates.flydate')) {
                     $res['flydates'] = collect($flydates);
                 }
 
                 return $res;
-
             case $request instanceof ActualizeRequest:
-                if ($errorMess = array_get($response, 'error.errormessage')) {
-                    throw new ResponseException($errorMess);
-                }
                 /** @var array|null $tour */
-                if ($tour = array_get($response, 'data.tour')) {
+                if ($tour = Arr::get($response, 'data.tour')) {
                     // возвращаем тур с его id из запроса
                     return $this->transformTourArray(array_merge(['tourid' => $request->tourid], $tour));
                 }
 
                 return null;
-
-            case $request instanceof ActualizeDetailRequest:
-                if ($errorMess = array_get($response, 'errormessage')) {
-                    throw new ResponseException($errorMess);
-                }
-
-                return $response;
             case $request instanceof HotelRequest:
-                if ($errorMess = array_get($response, 'error.errormessage')) {
-                    throw new ResponseException($errorMess);
-                }
-                if ($hotel = array_get($response, 'data.hotel')) {
+                if ($hotel = Arr::get($response, 'data.hotel')) {
                     return $this->transformHotelArray(array_merge(['hotelcode' => $request->hotelcode], $hotel));
                 }
 
                 return null;
-
             case $request instanceof HotToursRequest:
                 return [
-                    'count' => intval(array_get($response, 'hottours.hotcount')),
-                    'tours' => collect(array_map([$this, 'transformTourArray'], array_get($response, 'hottours.tour', [])))
+                    'count' => intval(Arr::get($response, 'hottours.hotcount')),
+                    'tours' => collect(array_map([$this, 'transformTourArray'], Arr::get($response, 'hottours.tour', [])))
                 ];
         }
 
@@ -139,10 +125,10 @@ class Tourvisor
      */
     protected function transformHotelArray(array $hotel)
     {
-        if ($hotelTours = array_get($hotel, 'tours.tour')) {
+        if ($hotelTours = Arr::get($hotel, 'tours.tour')) {
             $hotel['tours'] = collect(array_map([$this, 'transformTourArray'], $hotelTours));
         }
-        if ($hotelReviews = array_get($hotel, 'reviews.review')) {
+        if ($hotelReviews = Arr::get($hotel, 'reviews.review')) {
             $hotel['reviews'] = collect(array_map([$this, 'transformReviewArray'], $hotelReviews));
         }
 
